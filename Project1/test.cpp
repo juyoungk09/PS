@@ -1,6 +1,143 @@
-﻿#include<bits/stdc++.h>
+﻿#include <bits/stdc++.h>
 using namespace std;
+long long int n, minl=99999999999, maxl;
+vector<char> v(11);
+string str, minans, maxans;
+vector<int> visited(11);
+void dfs(int cnt, string str) {
+    if (cnt == n+1) {
+        if (minl > stoll(str)) minl = stoll(str), minans = str;
+        if(maxl < stoll(str)) maxl = stoll(str), maxans = str;
+        return;
+    }
+    for (int i = 0; i <= 9; i++) {
+        if (!visited[i]) {
+            if ((v[cnt - 1] == '<' && str[cnt - 1] < char(i + 48)) || (v[cnt - 1] == '>' && str[cnt - 1] > char(i + 48))) {
+                str.push_back(char(i + 48));
+                visited[i] = 1;
+                dfs(cnt + 1, str);
+                visited[i] = 0;
+                str.pop_back();
+            }
+        }
+    }
+}
+int main() {
+    cin >> n;
+    for (int i = 0; i < n; i++)cin >> v[i];
+    for (int i = 0; i <= 9; i++) {
+        visited[i] = 1;
+        dfs(1, str + char(i+48));
+        visited[i] = 0;
+    }
+    cout << maxans << "\n" << minans;
+}
 
+/*
+int n, minl=INT_MAX, start;
+vector<int> visited(11), check;
+vector<vector<int>> v(11, vector<int>(11));
+void dfs(int i, int sum, int cnt) {
+    if (cnt == n && v[i][start]!=0) {
+        minl = min(minl, sum+v[i][start]);
+        return;
+    }
+    for (int j = 0; j < n; j++) {
+        if (v[i][j] != 0 && !visited[j]) {
+            visited[j] = 1;
+            dfs(j, sum + v[i][j], cnt + 1);
+            visited[j] = 0;
+        }
+    }
+}
+int main() {
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> v[i][j];
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        visited[i] = 1;
+        start = i;
+        dfs(i, 0, 1);
+        visited[i] = 0;
+    }
+    cout << minl;
+}
+/*
+vector<int> v(9);
+int n, maxl = INT_MIN;
+void dfs(int i, int cnt, int s, vector<int> visited) {
+    int m = INT_MIN;
+    if (cnt == n) {
+        maxl = max(s, maxl);
+        return;
+    };
+    for (int j = 1; j <= n; j++) {
+        if (!visited[j]) {
+            visited[j] = 1;
+            dfs(j, cnt+1, s+abs(v[i]-v[j]), visited);
+            visited[j] = 0;
+        }
+    }
+    
+}
+int main() {
+    cin >> n;
+    vector<int> visited(n + 1);
+    for (int i = 1; i <= n; i++) cin >> v[i];
+    for (int i = 1; i <= n; i++) {
+        visited[i] = 1;
+        dfs(i, 1, 0, visited);
+        visited[i] = 0;
+    }
+        cout << maxl;
+}
+/*
+vector<int> v(9), visited(9), r;
+void dfs(int cnt) {
+    if (cnt == n) {
+        int s=0;
+        for (int i = 0; i < n - 1; i++) s += abs(r[i] - r[i + 1]);
+        res = max(res, s);
+    }
+    else {
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                visited[i] = 1;
+                r.push_back(v[i]);
+                dfs(cnt + 1);
+                r.pop_back();
+                visited[i] = 0;
+            }
+        }
+    }
+}
+int main() {
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> v[i];
+    dfs(0);
+    cout << res;
+}
+
+
+
+/*
+
+/*
+int n, s;
+vector<int> v(21, INT_MAX);
+int dfs(int i, int sum, int cnt) {
+    if (i >= n) return (sum == s && cnt);
+    return dfs(i + 1, sum, cnt) + dfs(i + 1, sum + v[i], cnt+1);
+}
+int main() {
+    cin >> n >> s;
+    for (int i = 0; i < n; i++) cin >> v[i];
+    cout << dfs(0, 0, 0);
+}
+/*
 int t, n;
 vector<int> dp(1001, 1);
 int main() {
